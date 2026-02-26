@@ -11,6 +11,11 @@ class StudyLocalDataSource {
         'description': 'Animation test',
         'icon': 'animation',
       },
+      {
+        'title': 'State Management',
+        'description': 'Comparisons between approaches',
+        'icon': 'sync_alt',
+      },
     ];
   }
 }

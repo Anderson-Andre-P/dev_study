@@ -1,46 +1,66 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../core/presentation/theme/app_spacing.dart';
+import '../bloc/study_bloc.dart';
+import '../bloc/study_event.dart';
+import '../bloc/study_state.dart';
 import '../widgets/study_card.dart';
-import 'layout_study_page.dart';
 
-class StudyHomePage extends StatelessWidget {
+class StudyHomePage extends StatefulWidget {
   const StudyHomePage({super.key});
 
-  static final List<StudyItemView> _items = [
-    StudyItemView(
-      title: 'Layouts',
-      description: 'Experimentos com composição de UI',
-      icon: Icons.grid_view_rounded,
-      pageBuilder: (_) => const LayoutStudyPage(),
-    ),
-    StudyItemView(
-      title: 'Animations',
-      description: 'Testes de animações implícitas/explicitas',
-      icon: Icons.animation_outlined,
-      pageBuilder: (_) => const LayoutStudyPage(),
-    ),
-    StudyItemView(
-      title: 'State Management',
-      description: 'Comparações entre abordagens',
-      icon: Icons.sync_alt_outlined,
-      pageBuilder: (_) => const LayoutStudyPage(),
-    ),
-  ];
+  @override
+  State<StudyHomePage> createState() => _StudyHomePageState();
+}
+
+class _StudyHomePageState extends State<StudyHomePage> {
+  @override
+  void initState() {
+    super.initState();
+    context.read<StudyBloc>().add(const StudyLoadRequested());
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('Flutter Study Hub')),
-      body: GridView.builder(
-        padding: const EdgeInsets.all(AppSpacing.lg),
-        itemCount: _items.length,
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2,
-          mainAxisSpacing: AppSpacing.md,
-          crossAxisSpacing: AppSpacing.md,
-          childAspectRatio: 1,
-        ),
-        itemBuilder: (_, index) => StudyCard(item: _items[index]),
+      body: BlocBuilder<StudyBloc, StudyState>(
+        builder: (context, state) {
+          if (state is StudyLoading || state is StudyInitial) {
+            return const Center(child: CircularProgressIndicator());
+          } else if (state is StudyError) {
+            return Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Icon(Icons.error_outline, size: 64),
+                  const SizedBox(height: AppSpacing.md),
+                  Text('Error: ${state.message}', textAlign: TextAlign.center),
+                  const SizedBox(height: AppSpacing.md),
+                  ElevatedButton(
+                    onPressed: () {
+                      context.read<StudyBloc>().add(const StudyLoadRequested());
+                    },
+                    child: const Text('Retry'),
+                  ),
+                ],
+              ),
+            );
+          } else if (state is StudyLoaded) {
+            return GridView.builder(
+              padding: const EdgeInsets.all(AppSpacing.lg),
+              itemCount: state.items.length,
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
+                mainAxisSpacing: AppSpacing.md,
+                crossAxisSpacing: AppSpacing.md,
+                childAspectRatio: 1,
+              ),
+              itemBuilder: (_, index) => StudyCard(item: state.items[index]),
+            );
+          }
+          return const Center(child: CircularProgressIndicator());
+        },
       ),
     );
   }
