@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../theme/app_spacing.dart';
+import '../../../../core/presentation/theme/app_spacing.dart';
 import '../widgets/study_card.dart';
 
 class StudyHomePage extends StatelessWidget {

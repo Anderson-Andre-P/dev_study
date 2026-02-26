@@ -1,5 +1,5 @@
 import 'package:dev_study/src/features/study_hub/presentation/pages/study_home_page.dart';
-import 'package:dev_study/src/features/study_hub/presentation/theme/app_theme.dart';
+import 'package:dev_study/src/core/presentation/theme/app_theme.dart';
 import 'package:flutter/material.dart';
 
 void main() {
