@@ -2,7 +2,7 @@
 
 This document explains the BLoC pattern and Clean Architecture concepts implemented in this project.
 
-## 📚 What You're Learning
+## What You're Learning
 
 ### 1. Clean Architecture Layers
 
@@ -69,23 +69,24 @@ When you open the app and the page loads studies:
 
 ### 3. Why Separate Layers?
 
-| Benefit | Explanation |
-|---------|-------------|
-| **Testability** | Each layer can be tested independently without UI |
-| **Reusability** | Domain logic can be used in web, mobile, desktop |
-| **Maintainability** | Changes to one layer don't break others |
-| **Flexibility** | Swap datasource (API → database) without changing UI |
-| **Scalability** | Easy to add features without everything breaking |
+| Benefit             | Explanation                                          |
+| ------------------- | ---------------------------------------------------- |
+| **Testability**     | Each layer can be tested independently without UI    |
+| **Reusability**     | Domain logic can be used in web, mobile, desktop     |
+| **Maintainability** | Changes to one layer don't break others              |
+| **Flexibility**     | Swap datasource (API → database) without changing UI |
+| **Scalability**     | Easy to add features without everything breaking     |
 
 ---
 
-## 🎯 BLoC Pattern Explained
+## BLoC Pattern Explained
 
 BLoC = **Business Logic Component**
 
 ### The 3 Parts of BLoC
 
 #### 1. **Events** (Input)
+
 - Represent user actions: "Load studies", "Favorite this item", etc.
 - Sent TO the BLoC
 - Located in `study_event.dart`
@@ -97,6 +98,7 @@ class StudyLoadRequested extends StudyEvent {
 ```
 
 #### 2. **States** (Output)
+
 - Represent the UI state: Loading, Loaded, Error, etc.
 - Emitted BY the BLoC
 - Located in `study_state.dart`
@@ -109,6 +111,7 @@ class StudyLoaded extends StudyState {
 ```
 
 #### 3. **BLoC** (Logic)
+
 - Listens to events
 - Uses business logic (domain layer)
 - Emits states
@@ -146,10 +149,12 @@ UI rebuilds when state changes
 
 ---
 
-## 📁 File Structure & Responsibilities
+## File Structure & Responsibilities
 
 ### `/presentation/bloc/`
+
 **Purpose**: State management using BLoC pattern
+
 - `study_event.dart` - Events (user actions)
 - `study_state.dart` - States (UI states)
 - `study_bloc.dart` - BLoC (business logic orchestration)
@@ -157,14 +162,18 @@ UI rebuilds when state changes
 **Key Concept**: BLoC is the middleman between UI and Domain layer
 
 ### `/presentation/pages/`
+
 **Purpose**: UI screens users interact with
+
 - `study_home_page.dart` - Main screen, uses BlocBuilder
 - `layout_study_page.dart` - Detail screen
 
 **Key Concept**: Pages listen to BLoC states and rebuild UI accordingly
 
 ### `/domain/`
+
 **Purpose**: Business logic (framework-independent)
+
 - `entities/study.dart` - Data model
 - `usecases/get_studies.dart` - Business logic ("get all studies")
 - `repositories/study_repository.dart` - Interface
@@ -172,21 +181,25 @@ UI rebuilds when state changes
 **Key Concept**: Domain doesn't know about Flutter, databases, or APIs
 
 ### `/data/`
+
 **Purpose**: Fetching and transforming data
+
 - `datasources/study_local_datasource.dart` - Data source (hardcoded, API, database, etc.)
 - `repositories/study_repository_impl.dart` - Implements domain interface
 
 **Key Concept**: Converts raw data into domain entities
 
 ### `/app/`
+
 **Purpose**: Dependency Injection setup
+
 - `study_hub_injection.dart` - Creates and wires up all dependencies
 
 **Key Concept**: Central place where all layers connect
 
 ---
 
-## 🔄 Dependency Injection Deep Dive
+## Dependency Injection Deep Dive
 
 ### What is DI?
 
@@ -248,36 +261,41 @@ final testBloc = StudyBloc(
 
 ---
 
-## 💡 Key Concepts to Remember
+## Key Concepts to Remember
 
 ### 1. **Unidirectional Data Flow**
+
 - Data flows DOWN through layers (Presentation → Domain → Data)
 - Events flow UP from UI to BLoC
 - States flow DOWN from BLoC to UI
 
 ### 2. **Separation of Concerns**
+
 - Domain layer: Pure logic, no Flutter/database code
 - Data layer: Fetching/storing, no business logic
 - Presentation layer: UI only, delegates logic to BLoC
 
 ### 3. **Entity vs Model vs View**
+
 - **Entity** (Domain): `Study` - business model
 - **Model** (Data): Raw `Map` from datasource
 - **View** (Presentation): `StudyItemView` - what UI needs
 
 ### 4. **Reactive UI**
+
 - Don't manually call setState()
 - Don't manually update widgets
 - Just emit state changes, UI reacts automatically via BlocBuilder
 
 ### 5. **Framework Independence**
+
 - Domain layer has ZERO imports from `package:flutter`
 - Domain logic could run in backend, CLI, web, anywhere
 - Only Presentation layer imports Flutter
 
 ---
 
-## 🚀 Common Use Cases
+## Common Use Cases
 
 ### Adding a New Feature
 
@@ -306,11 +324,12 @@ final testBloc = StudyBloc(
 
 ---
 
-## 📖 Reading the Code
+## Reading the Code
 
 When you open a file, look for these patterns:
 
 ### In BLoC
+
 ```dart
 // Event handler - listens for events and processes them
 Future<void> _onStudyLoadRequested(...) async {
@@ -325,6 +344,7 @@ Future<void> _onStudyLoadRequested(...) async {
 ```
 
 ### In Pages
+
 ```dart
 // Trigger events in initState or callbacks
 @override
@@ -345,7 +365,7 @@ BlocBuilder<StudyBloc, StudyState>(
 
 ---
 
-## 🎓 Learning Path
+## Learning Path
 
 1. **Understand the layers** - Read the comments in each file explaining its layer
 2. **Follow the data flow** - Trace a study from datasource to UI
@@ -355,15 +375,17 @@ BlocBuilder<StudyBloc, StudyState>(
 
 ---
 
-## 📌 Files with Comments
+## Files with Comments
 
 All key files have detailed comments explaining:
+
 - What each class/method does
 - Why it's structured that way
 - How it fits into the architecture
 - Code examples and explanations
 
 **Start reading here:**
+
 1. `lib/src/app/study_hub_injection.dart` - See all layers connected
 2. `lib/src/features/study_hub/presentation/bloc/study_bloc.dart` - Core logic
 3. `lib/src/features/study_hub/presentation/pages/study_home_page.dart` - UI integration
@@ -371,7 +393,7 @@ All key files have detailed comments explaining:
 
 ---
 
-## 🔗 Architecture Diagram
+## Architecture Diagram
 
 ```
 ┌──────────────────────────────┐
@@ -418,13 +440,3 @@ All key files have detailed comments explaining:
         [Hardcoded Data]
       (Database/API in real app)
 ```
-
----
-
-Happy Learning! 🚀
-
-Feel free to:
-- Read the comments in the code
-- Trace data flow from datasource to UI
-- Add print statements to see when things happen
-- Try modifying the data and seeing how it flows through layers
