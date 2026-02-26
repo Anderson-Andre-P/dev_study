@@ -16,7 +16,11 @@ class StudyCard extends StatelessWidget {
 
     return InkWell(
       borderRadius: AppBorderRadius.medium,
-      onTap: () {},
+      onTap: () {
+        Navigator.of(
+          context,
+        ).push(MaterialPageRoute(builder: item.pageBuilder));
+      },
       child: Ink(
         decoration: AppContainerTheme.card.copyWith(
           boxShadow: const [

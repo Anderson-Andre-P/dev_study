@@ -1,25 +1,29 @@
 import 'package:flutter/material.dart';
 import '../../../../core/presentation/theme/app_spacing.dart';
 import '../widgets/study_card.dart';
+import 'layout_study_page.dart';
 
 class StudyHomePage extends StatelessWidget {
   const StudyHomePage({super.key});
 
-  static const List<StudyItemView> _items = [
+  static final List<StudyItemView> _items = [
     StudyItemView(
       title: 'Layouts',
       description: 'Experimentos com composição de UI',
       icon: Icons.grid_view_rounded,
+      pageBuilder: (_) => const LayoutStudyPage(),
     ),
     StudyItemView(
       title: 'Animations',
       description: 'Testes de animações implícitas/explicitas',
       icon: Icons.animation_outlined,
+      pageBuilder: (_) => const LayoutStudyPage(),
     ),
     StudyItemView(
       title: 'State Management',
       description: 'Comparações entre abordagens',
       icon: Icons.sync_alt_outlined,
+      pageBuilder: (_) => const LayoutStudyPage(),
     ),
   ];
 
@@ -47,9 +51,13 @@ class StudyItemView {
   final String description;
   final IconData icon;
 
+  final WidgetBuilder pageBuilder;
+
   const StudyItemView({
     required this.title,
     required this.description,
     required this.icon,
+
+    required this.pageBuilder,
   });
 }
