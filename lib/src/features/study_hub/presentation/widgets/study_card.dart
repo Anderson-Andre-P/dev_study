@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 import '../pages/study_home_page.dart';
+import '../theme/app_border_radius.dart';
+import '../theme/app_container_theme.dart';
+import '../theme/app_spacing.dart';
+import '../theme/app_theme_colors.dart';
 
 class StudyCard extends StatelessWidget {
   final StudyItemView item;
@@ -8,13 +12,13 @@ class StudyCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final textTheme = Theme.of(context).textTheme;
+
     return InkWell(
-      borderRadius: BorderRadius.circular(12),
+      borderRadius: AppBorderRadius.medium,
       onTap: () {},
       child: Ink(
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(12),
-          color: Colors.white,
+        decoration: AppContainerTheme.card.copyWith(
           boxShadow: const [
             BoxShadow(
               blurRadius: 12,
@@ -23,22 +27,28 @@ class StudyCard extends StatelessWidget {
             ),
           ],
         ),
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.all(AppSpacing.md),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Icon(item.icon, size: 40, color: Colors.indigo),
+            Icon(item.icon, size: 40, color: AppThemeColors.primary),
+
             const Spacer(),
+
             Text(
               item.title,
-              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+              style: textTheme.headlineMedium,
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
             ),
-            const SizedBox(height: 6),
+
+            const SizedBox(height: AppSpacing.xs),
+
             Text(
               item.description,
-              maxLines: 3,
+              style: textTheme.bodyMedium,
+              maxLines: 2,
               overflow: TextOverflow.ellipsis,
-              style: TextStyle(fontSize: 13, color: Colors.grey.shade600),
             ),
           ],
         ),

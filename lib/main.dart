@@ -1,5 +1,6 @@
+import 'package:dev_study/src/features/study_hub/presentation/pages/study_home_page.dart';
+import 'package:dev_study/src/features/study_hub/presentation/theme/app_theme.dart';
 import 'package:flutter/material.dart';
-import 'src/features/study_hub/presentation/pages/study_home_page.dart';
 
 void main() {
   runApp(const MainApp());
@@ -10,9 +11,10 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: StudyHomePage(),
+      theme: AppTheme.light,
+      home: const StudyHomePage(),
     );
   }
 }

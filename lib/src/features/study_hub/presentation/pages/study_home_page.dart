@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-
+import '../theme/app_spacing.dart';
 import '../widgets/study_card.dart';
 
 class StudyHomePage extends StatelessWidget {
@@ -28,13 +28,13 @@ class StudyHomePage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(title: const Text('Flutter Study Hub')),
       body: GridView.builder(
-        padding: const EdgeInsets.all(24),
+        padding: const EdgeInsets.all(AppSpacing.lg),
         itemCount: _items.length,
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 2,
-          mainAxisSpacing: 16,
-          crossAxisSpacing: 16,
-          childAspectRatio: 1.25,
+          mainAxisSpacing: AppSpacing.md,
+          crossAxisSpacing: AppSpacing.md,
+          childAspectRatio: 1,
         ),
         itemBuilder: (_, index) => StudyCard(item: _items[index]),
       ),
