@@ -67,6 +67,11 @@ class StudyLocalDataSource {
         'description': 'HTTP API consumption with the http package',
         'icon': 'cloud',
       },
+      {
+        'title': 'Counter',
+        'description': 'Incremental counter with BLoC state management',
+        'icon': 'counter',
+      },
     ];
   }
 }

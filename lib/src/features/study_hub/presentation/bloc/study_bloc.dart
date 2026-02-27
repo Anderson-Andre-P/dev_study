@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../app/study_hub_injection.dart';
+import '../../../counter/presentation/bloc/counter_bloc.dart';
+import '../../../counter/presentation/pages/counter_page.dart';
 import '../../../weather/presentation/bloc/weather_bloc.dart';
 import '../../../weather/presentation/pages/weather_page.dart';
 import '../../domain/entities/study.dart';
@@ -106,12 +108,13 @@ class StudyBloc extends Bloc<StudyEvent, StudyState> {
       'animation' => Icons.animation_outlined,
       'sync_alt' => Icons.sync_alt_outlined,
       'cloud' => Icons.cloud_outlined,
+      'counter' => Icons.plus_one_outlined,
       _ => Icons.help_outline, // Default icon if unknown
     };
 
     // Determine the page to navigate to based on the study type
     // Most studies go to LayoutStudyPage
-    // Weather API goes to WeatherPage with its own BLoC
+    // Weather API and Counter go to their own pages with their own BLoCs
     late WidgetBuilder pageBuilder;
 
     if (study.title == 'Weather API') {
@@ -120,6 +123,13 @@ class StudyBloc extends Bloc<StudyEvent, StudyState> {
       pageBuilder = (_) => BlocProvider<WeatherBloc>(
         create: (_) => createWeatherBloc(),
         child: const WeatherPage(),
+      );
+    } else if (study.title == 'Counter') {
+      // Special handling for Counter study
+      // Wrap CounterPage with BlocProvider so it has access to CounterBloc
+      pageBuilder = (_) => BlocProvider<CounterBloc>(
+        create: (_) => createCounterBloc(),
+        child: const CounterPage(),
       );
     } else {
       // All other studies use LayoutStudyPage

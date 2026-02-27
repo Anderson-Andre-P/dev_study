@@ -1,3 +1,9 @@
+import 'package:dev_study/src/features/counter/data/datasources/counter_local_datasource.dart';
+import 'package:dev_study/src/features/counter/data/repositories/counter_repository_impl.dart';
+import 'package:dev_study/src/features/counter/domain/usecases/decrement_counter.dart';
+import 'package:dev_study/src/features/counter/domain/usecases/increment_counter.dart';
+import 'package:dev_study/src/features/counter/domain/usecases/reset_counter.dart';
+import 'package:dev_study/src/features/counter/presentation/bloc/counter_bloc.dart';
 import 'package:dev_study/src/features/study_hub/data/datasources/study_local_datasource.dart';
 import 'package:dev_study/src/features/study_hub/data/repositories/study_repository_impl.dart';
 import 'package:dev_study/src/features/weather/data/datasources/weather_remote_datasource.dart';
@@ -111,6 +117,36 @@ WeatherBloc createWeatherBloc() {
   /// Layer 4 - PRESENTATION: WeatherBloc
   /// Orchestrates the weather feature
   final bloc = WeatherBloc(getWeatherByCity);
+
+  return bloc;
+}
+
+/// ============================================================================
+/// COUNTER FEATURE - Demonstrates simple BLoC state management
+/// ============================================================================
+
+/// Same clean architecture pattern, but with in-memory data (no API)
+CounterBloc createCounterBloc() {
+  /// Layer 1 - DATA: CounterLocalDataSource
+  /// Stores counter value in memory
+  final dataSource = CounterLocalDataSource();
+
+  /// Layer 2 - DATA: CounterRepositoryImpl
+  /// Transforms raw int to Counter domain entity
+  final repository = CounterRepositoryImpl(dataSource);
+
+  /// Layer 3 - DOMAIN: Three usecases for different operations
+  final incrementCounter = IncrementCounter(repository);
+  final decrementCounter = DecrementCounter(repository);
+  final resetCounter = ResetCounter(repository);
+
+  /// Layer 4 - PRESENTATION: CounterBloc
+  /// Handles all counter operations
+  final bloc = CounterBloc(
+    incrementCounter,
+    decrementCounter,
+    resetCounter,
+  );
 
   return bloc;
 }
