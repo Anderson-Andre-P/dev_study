@@ -6,6 +6,13 @@ import 'package:dev_study/src/features/counter/domain/usecases/reset_counter.dar
 import 'package:dev_study/src/features/counter/presentation/bloc/counter_bloc.dart';
 import 'package:dev_study/src/features/study_hub/data/datasources/study_local_datasource.dart';
 import 'package:dev_study/src/features/study_hub/data/repositories/study_repository_impl.dart';
+import 'package:dev_study/src/features/timer/data/datasources/timer_datasource.dart';
+import 'package:dev_study/src/features/timer/data/repositories/timer_repository_impl.dart';
+import 'package:dev_study/src/features/timer/domain/usecases/pause_timer.dart';
+import 'package:dev_study/src/features/timer/domain/usecases/resume_timer.dart';
+import 'package:dev_study/src/features/timer/domain/usecases/start_timer.dart';
+import 'package:dev_study/src/features/timer/domain/usecases/stop_timer.dart';
+import 'package:dev_study/src/features/timer/presentation/bloc/timer_bloc.dart';
 import 'package:dev_study/src/features/weather/data/datasources/weather_remote_datasource.dart';
 import 'package:dev_study/src/features/weather/data/repositories/weather_repository_impl.dart';
 import 'package:dev_study/src/features/weather/domain/usecases/get_weather_by_city.dart';
@@ -146,6 +153,43 @@ CounterBloc createCounterBloc() {
     incrementCounter,
     decrementCounter,
     resetCounter,
+  );
+
+  return bloc;
+}
+
+/// ============================================================================
+/// TIMER FEATURE - Demonstrates stream management with BLoC
+/// ============================================================================
+
+/// Same clean architecture pattern, but with stream-based state updates
+TimerBloc createTimerBloc() {
+  /// Layer 1 - DATA: TimerDataSource
+  /// Manages timer stream using Timer.periodic and StreamController
+  /// Handles timer ticks, pause, resume, and stop operations
+  final dataSource = TimerDataSource();
+
+  /// Layer 2 - DATA: TimerRepositoryImpl
+  /// Implements TimerRepository interface
+  /// Provides methods to start, pause, resume, stop timer
+  final repository = TimerRepositoryImpl(dataSource);
+
+  /// Layer 3 - DOMAIN: Four usecases for different timer operations
+  /// Each usecase encapsulates a single business operation
+  final startTimer = StartTimer(repository);
+  final pauseTimer = PauseTimer(repository);
+  final resumeTimer = ResumeTimer(repository);
+  final stopTimer = StopTimer(repository);
+
+  /// Layer 4 - PRESENTATION: TimerBloc
+  /// Orchestrates timer operations and manages state
+  /// Listens to the timer stream and emits state changes
+  final bloc = TimerBloc(
+    startTimer,
+    pauseTimer,
+    resumeTimer,
+    stopTimer,
+    repository,
   );
 
   return bloc;

@@ -72,6 +72,11 @@ class StudyLocalDataSource {
         'description': 'Incremental counter with BLoC state management',
         'icon': 'counter',
       },
+      {
+        'title': 'Timer',
+        'description': 'Countdown timer demonstrating stream management with BLoC',
+        'icon': 'timer',
+      },
     ];
   }
 }

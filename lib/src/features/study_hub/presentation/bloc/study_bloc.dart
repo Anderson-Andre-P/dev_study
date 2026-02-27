@@ -4,6 +4,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../app/study_hub_injection.dart';
 import '../../../counter/presentation/bloc/counter_bloc.dart';
 import '../../../counter/presentation/pages/counter_page.dart';
+import '../../../timer/presentation/bloc/timer_bloc.dart';
+import '../../../timer/presentation/pages/timer_page.dart';
 import '../../../weather/presentation/bloc/weather_bloc.dart';
 import '../../../weather/presentation/pages/weather_page.dart';
 import '../../domain/entities/study.dart';
@@ -109,6 +111,7 @@ class StudyBloc extends Bloc<StudyEvent, StudyState> {
       'sync_alt' => Icons.sync_alt_outlined,
       'cloud' => Icons.cloud_outlined,
       'counter' => Icons.plus_one_outlined,
+      'timer' => Icons.timer_outlined,
       _ => Icons.help_outline, // Default icon if unknown
     };
 
@@ -130,6 +133,13 @@ class StudyBloc extends Bloc<StudyEvent, StudyState> {
       pageBuilder = (_) => BlocProvider<CounterBloc>(
         create: (_) => createCounterBloc(),
         child: const CounterPage(),
+      );
+    } else if (study.title == 'Timer') {
+      // Special handling for Timer study
+      // Wrap TimerPage with BlocProvider so it has access to TimerBloc
+      pageBuilder = (_) => BlocProvider<TimerBloc>(
+        create: (_) => createTimerBloc(),
+        child: const TimerPage(),
       );
     } else {
       // All other studies use LayoutStudyPage
