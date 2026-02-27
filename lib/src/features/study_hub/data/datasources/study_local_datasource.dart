@@ -50,7 +50,7 @@ class StudyLocalDataSource {
       {
         'title': 'Layouts',
         'description': 'Experiments with UI composition',
-        'icon': 'grid', // String icon name - will be converted to Flutter Icon
+        'icon': 'grid',
       },
       {
         'title': 'Animations',
@@ -61,6 +61,11 @@ class StudyLocalDataSource {
         'title': 'State Management',
         'description': 'Comparisons between approaches',
         'icon': 'sync_alt',
+      },
+      {
+        'title': 'Weather API',
+        'description': 'HTTP API consumption with the http package',
+        'icon': 'cloud',
       },
     ];
   }

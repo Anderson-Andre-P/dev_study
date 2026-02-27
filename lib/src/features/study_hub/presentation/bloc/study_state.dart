@@ -1,4 +1,4 @@
-import '../pages/study_home_page.dart';
+import '../view_models/study_item_view_model.dart';
 
 /// States represent the UI state at any given moment in the BLoC.
 /// In clean architecture, states are the OUTPUT from the presentation layer.

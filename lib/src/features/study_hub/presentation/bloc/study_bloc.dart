@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../../app/study_hub_injection.dart';
+import '../../../weather/presentation/bloc/weather_bloc.dart';
+import '../../../weather/presentation/pages/weather_page.dart';
 import '../../domain/entities/study.dart';
 import '../../domain/usecases/get_studies.dart';
 import '../pages/layout_study_page.dart';
-import '../pages/study_home_page.dart';
+import '../view_models/study_item_view_model.dart';
 import 'study_event.dart';
 import 'study_state.dart';
 
@@ -102,8 +105,26 @@ class StudyBloc extends Bloc<StudyEvent, StudyState> {
       'grid' => Icons.grid_view_rounded,
       'animation' => Icons.animation_outlined,
       'sync_alt' => Icons.sync_alt_outlined,
+      'cloud' => Icons.cloud_outlined,
       _ => Icons.help_outline, // Default icon if unknown
     };
+
+    // Determine the page to navigate to based on the study type
+    // Most studies go to LayoutStudyPage
+    // Weather API goes to WeatherPage with its own BLoC
+    late WidgetBuilder pageBuilder;
+
+    if (study.title == 'Weather API') {
+      // Special handling for Weather API study
+      // Wrap WeatherPage with BlocProvider so it has access to WeatherBloc
+      pageBuilder = (_) => BlocProvider<WeatherBloc>(
+        create: (_) => createWeatherBloc(),
+        child: const WeatherPage(),
+      );
+    } else {
+      // All other studies use LayoutStudyPage
+      pageBuilder = (_) => const LayoutStudyPage();
+    }
 
     // Create a UI-friendly model with all necessary UI data
     // The pageBuilder lambda defines what page opens when the card is tapped
@@ -111,7 +132,7 @@ class StudyBloc extends Bloc<StudyEvent, StudyState> {
       title: study.title,
       description: study.description,
       icon: icon, // Transformed icon
-      pageBuilder: (_) => const LayoutStudyPage(), // Navigation
+      pageBuilder: pageBuilder, // Dynamic navigation
     );
   }
 }

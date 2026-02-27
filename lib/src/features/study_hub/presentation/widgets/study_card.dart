@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import '../pages/study_home_page.dart';
 import '../../../../core/presentation/theme/app_border_radius.dart';
 import '../../../../core/presentation/theme/app_container_theme.dart';
 import '../../../../core/presentation/theme/app_spacing.dart';
 import '../../../../core/presentation/theme/app_theme_colors.dart';
+import '../view_models/study_item_view_model.dart';
 
 class StudyCard extends StatelessWidget {
   final StudyItemView item;

@@ -8,7 +8,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 /// APP STARTUP: Where all the architecture comes together
 ///
 /// This file orchestrates:
-/// 1. Creating the BLoC (dependency injection)
+/// 1. Creating the StudyBloc (dependency injection)
 /// 2. Making it available to all child widgets (BlocProvider)
 /// 3. Creating the root MaterialApp
 void main() {
@@ -22,15 +22,18 @@ void main() {
 /// Widget Tree Structure:
 /// MainApp (this)
 ///   └─ MaterialApp (provides Material Design)
-///      └─ BlocProvider (makes StudyBloc available to children)
+///      └─ `BlocProvider&lt;StudyBloc&gt;` (makes StudyBloc available to children)
 ///         └─ StudyHomePage (the first screen user sees)
 ///
-/// Why BlocProvider?
+/// Why BlocProvider here?
 /// BlocProvider is a widget that:
 /// - Creates the StudyBloc once at app startup
 /// - Makes it available to all descendants via context.read()
 /// - Closes/disposes the BLoC when it's removed from the tree
 /// - Manages the lifetime of the BLoC
+///
+/// The WeatherBloc is created separately when navigating to the Weather page
+/// This keeps things modular: each study page manages its own BLoC if needed
 class MainApp extends StatelessWidget {
   const MainApp({super.key});
 
@@ -39,6 +42,7 @@ class MainApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: AppTheme.light,
+
       /// BlocProvider: Makes StudyBloc available to the entire widget tree
       ///
       /// Without BlocProvider:
@@ -53,6 +57,7 @@ class MainApp extends StatelessWidget {
       /// The lambda (_) => createStudyBloc() is called once at app startup
       home: BlocProvider<StudyBloc>(
         create: (_) => createStudyBloc(),
+
         /// The StudyHomePage is now "inside" the BlocProvider
         /// This means StudyHomePage can access the BLoC with:
         /// context.read<StudyBloc>()
