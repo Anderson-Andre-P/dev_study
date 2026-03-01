@@ -77,6 +77,11 @@ class StudyLocalDataSource {
         'description': 'Countdown timer demonstrating stream management with BLoC',
         'icon': 'timer',
       },
+      {
+        'title': 'Phone Validation',
+        'description': 'Real-time input field validation with BLoC',
+        'icon': 'phone',
+      },
     ];
   }
 }

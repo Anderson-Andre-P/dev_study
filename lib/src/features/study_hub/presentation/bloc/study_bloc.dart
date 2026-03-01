@@ -4,6 +4,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../app/study_hub_injection.dart';
 import '../../../counter/presentation/bloc/counter_bloc.dart';
 import '../../../counter/presentation/pages/counter_page.dart';
+import '../../../phone_validation/presentation/bloc/phone_validation_bloc.dart';
+import '../../../phone_validation/presentation/pages/phone_validation_page.dart';
 import '../../../timer/presentation/bloc/timer_bloc.dart';
 import '../../../timer/presentation/pages/timer_page.dart';
 import '../../../weather/presentation/bloc/weather_bloc.dart';
@@ -112,6 +114,7 @@ class StudyBloc extends Bloc<StudyEvent, StudyState> {
       'cloud' => Icons.cloud_outlined,
       'counter' => Icons.plus_one_outlined,
       'timer' => Icons.timer_outlined,
+      'phone' => Icons.phone_outlined,
       _ => Icons.help_outline, // Default icon if unknown
     };
 
@@ -140,6 +143,13 @@ class StudyBloc extends Bloc<StudyEvent, StudyState> {
       pageBuilder = (_) => BlocProvider<TimerBloc>(
         create: (_) => createTimerBloc(),
         child: const TimerPage(),
+      );
+    } else if (study.title == 'Phone Validation') {
+      // Special handling for Phone Validation study
+      // Wrap PhoneValidationPage with BlocProvider so it has access to PhoneValidationBloc
+      pageBuilder = (_) => BlocProvider<PhoneValidationBloc>(
+        create: (_) => createPhoneValidationBloc(),
+        child: const PhoneValidationPage(),
       );
     } else {
       // All other studies use LayoutStudyPage

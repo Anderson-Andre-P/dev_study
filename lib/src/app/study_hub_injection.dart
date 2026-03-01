@@ -4,6 +4,10 @@ import 'package:dev_study/src/features/counter/domain/usecases/decrement_counter
 import 'package:dev_study/src/features/counter/domain/usecases/increment_counter.dart';
 import 'package:dev_study/src/features/counter/domain/usecases/reset_counter.dart';
 import 'package:dev_study/src/features/counter/presentation/bloc/counter_bloc.dart';
+import 'package:dev_study/src/features/phone_validation/data/datasources/phone_validation_datasource.dart';
+import 'package:dev_study/src/features/phone_validation/data/repositories/phone_validation_repository_impl.dart';
+import 'package:dev_study/src/features/phone_validation/domain/usecases/validate_phone_number.dart';
+import 'package:dev_study/src/features/phone_validation/presentation/bloc/phone_validation_bloc.dart';
 import 'package:dev_study/src/features/study_hub/data/datasources/study_local_datasource.dart';
 import 'package:dev_study/src/features/study_hub/data/repositories/study_repository_impl.dart';
 import 'package:dev_study/src/features/timer/data/datasources/timer_datasource.dart';
@@ -191,6 +195,36 @@ TimerBloc createTimerBloc() {
     stopTimer,
     repository,
   );
+
+  return bloc;
+}
+
+/// ============================================================================
+/// PHONE VALIDATION FEATURE - Demonstrates real-time input validation
+/// ============================================================================
+
+/// Same clean architecture pattern, but focused on validation
+PhoneValidationBloc createPhoneValidationBloc() {
+  /// Layer 1 - DATA: PhoneValidationDataSource
+  /// Contains the validation logic (regex pattern)
+  /// Validates phone numbers as they're typed
+  final dataSource = PhoneValidationDataSource();
+
+  /// Layer 2 - DATA: PhoneValidationRepositoryImpl
+  /// Transforms raw bool from datasource into PhoneNumber entity
+  /// Wraps the validation result with the original value
+  final repository = PhoneValidationRepositoryImpl(dataSource);
+
+  /// Layer 3 - DOMAIN: ValidatePhoneNumber usecase
+  /// Encapsulates the validation business logic
+  /// Domain-independent: could be used in CLI, web, or desktop
+  final validatePhoneNumber = ValidatePhoneNumber(repository);
+
+  /// Layer 4 - PRESENTATION: PhoneValidationBloc
+  /// Handles validation events
+  /// Listens to real-time input changes
+  /// Emits validation results to the UI
+  final bloc = PhoneValidationBloc(validatePhoneNumber);
 
   return bloc;
 }
